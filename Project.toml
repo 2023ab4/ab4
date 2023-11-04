@@ -1,6 +1,6 @@
 name = "Ab4Paper2023"
 uuid = "5467c14f-b3bb-4772-a004-7e60c38dba4c"
-authors = ["JFdCD <jfdecd@icloud.com>"]
+authors = ["JFdCD <jfdecd@icloud.com>", "Guido Uguzzoni"]
 version = "0.1.0"
 
 [deps]
