@@ -12,3 +12,12 @@ See the full paper at this [link](https://www.biorxiv.org/content/10.1101/2023.1
 
 ## Installation
 
+The source code is writen in Julia v1.9. You can install Julia from https://julialang.org.
+
+To install the package, clone this repository:
+
+```
+git clone https://github.com/2023ab4/ab4.git
+```
+
+Then start a Jupyter session, and navigate to the `notebooks` directory. You can open any of the notebooks there. Be sure the code is running in the environment of this project (`Ab4Paper2023`).
