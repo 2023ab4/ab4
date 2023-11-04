@@ -1,0 +1,30 @@
+name = "Ab4Paper2023"
+uuid = "5467c14f-b3bb-4772-a004-7e60c38dba4c"
+authors = ["JFdCD <jfdecd@icloud.com>"]
+version = "0.1.0"
+
+[deps]
+AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
+BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[compat]
+AbstractTrees = "0.4"
+Aqua = "0.7"
+BioSequences = "3.1"
+CairoMakie = "0.10"
+ChainRulesCore = "1.18"
+Makie = "0.19"
+SpecialFunctions = "2.3"
+Statistics = "1.9"
+
+[extras]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Aqua", "Test"]
