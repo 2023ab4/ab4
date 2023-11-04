@@ -52,3 +52,23 @@ function tensorsizes(X::NumArray, W::NumArray, Y::NumArray)
 end
 
 sum_(A::AbstractArray; dims = :) = dropdims(sum(A; dims = dims); dims = dims)
+logsumexp_(A::AbstractArray; dims = :) = dropdims(logsumexp(A; dims = dims); dims = dims)
+mean_(A::AbstractArray; dims = :) = dropdims(mean(A; dims = dims); dims = dims)
+
+function posonly(xs...)
+    idx = (&).(map(x -> (x .> 0), xs)...)
+    return map(x -> x[idx], xs)
+end
+
+first_and_last(itr) = first(itr), last(itr)
+
+"""
+    select_mask(select)
+
+Given an array `select`, returns another array with `Inf` where `select` is > 0,
+and zeros elsewhere.
+"""
+select_mask(select::AbstractArray) = (select .> 0) .* Inf
+
+unsqueeze_left(A::AbstractArray) = reshape(A, 1, size(A)...)
+unsqueeze_right(A::AbstractArray) = reshape(A, size(A)..., 1)

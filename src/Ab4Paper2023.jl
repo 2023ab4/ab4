@@ -11,6 +11,8 @@ using Statistics: mean
 using DataFrames: DataFrame
 using Flux: @functor, logsoftmax
 using LazyArtifacts: LazyArtifacts, @artifact_str
+using ChainRulesCore: @ignore_derivatives
+using LogExpFunctions: logsumexp
 
 const Float = Float32 # float type we use
 const NumArray{T<:Number,N} = AbstractArray{<:T,N}
@@ -25,5 +27,6 @@ include("minilib_experiment_2023.jl")
 include("energies.jl")
 include("saved_model.jl")
 include("model.jl")
+include("build_model.jl")
 
 end

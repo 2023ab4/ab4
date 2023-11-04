@@ -44,3 +44,30 @@ end
     v = randn(10, 100)
     @test tensordot(v, A, v) ≈ diag(v' * A * v)
 end
+
+@testset "select_mask" begin
+    select = rand(Bool, 10, 12)
+    mask = select_mask(select)
+    @test size(mask) == size(select)
+    @test mask == replace(select, true => Inf, false => 0)
+
+    select = randn(10, 12)
+    @test select_mask(select) == select_mask(select .> 0)
+    mask = select_mask(select)
+    @test size(mask) == size(select)
+    @test mask == replace(select .> 0, true => Inf, false => 0)
+end
+
+@testset "unsqueeze" begin
+    A = randn(12, 11)
+
+    A_ = unsqueeze_left(A)
+    @test size(A_) == (1, size(A)...)
+    @test vec(A_) == vec(A)
+    @inferred unsqueeze_left(A)
+
+    A_ = unsqueeze_right(A)
+    @test size(A_) == (size(A)..., 1)
+    @test vec(A_) == vec(A)
+    @inferred unsqueeze_right(A)
+end
