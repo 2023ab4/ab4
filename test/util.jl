@@ -1,12 +1,29 @@
 using Test: @testset, @test, @inferred
-using Ab4Paper2023: sum_, log_multinomial, tensordot
+using Ab4Paper2023: sum_, mean_, logsumexp_, log_multinomial, tensordot, select_mask, unsqueeze_left, unsqueeze_right
 using LinearAlgebra: diag
+using LogExpFunctions: logsumexp
 
 @testset "sum_" begin
     A = randn(5,4,6)
     X = sum_(A; dims = (1,2))
     @test vec(X) ≈ vec(sum(A; dims = (1,2)))
     @test size(X) == (6,)
+end
+
+@testset "mean_" begin
+    A = randn(5,4,6)
+    X = mean_(A; dims = (1,2))
+    @test vec(X) ≈ vec(mean_(A; dims = (1,2)))
+    @test size(X) == (6,)
+end
+
+@testset "logsumexp_" begin
+    A = randn(5,4,3)
+    S = logsumexp(A; dims = 2)
+    S_ = logsumexp_(A; dims = 2)
+    @test vec(S_) ≈ vec(S)
+    @test size(S) == (5,1,3)
+    @test size(S_) == (5,3)
 end
 
 @testset "log_multinomial" begin
