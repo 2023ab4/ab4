@@ -1,4 +1,4 @@
-sequence, origin, target, optimization obj, filter
+sequence,origin,target,optimization_obj,filter
 FKRP,model generated,blue,affinity,low enrichment
 KRRP,model generated,blue,affinity,low enrichment
 RKKK,model generated,blue,affinity,low enrichment
