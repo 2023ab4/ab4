@@ -21,7 +21,6 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
 AbstractTrees = "0.4"
-Aqua = "0.7"
 BioSequences = "3.1"
 CairoMakie = "0.10"
 ChainRulesCore = "1.18"
@@ -35,12 +34,4 @@ OneHot = "0.3,0.4"
 SpecialFunctions = "2.3"
 Statistics = "1.9"
 StatsBase = "0.34"
-
-[extras]
-Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
-LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-LogExpFunctions = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Aqua", "LinearAlgebra", "LogExpFunctions", "Test"]
+julia = "1.9"
