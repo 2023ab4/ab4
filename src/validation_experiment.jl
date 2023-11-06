@@ -40,7 +40,7 @@ function probed_candidates(file::String = validation_dir() * "generated_sequence
 end
 
 
-    probed_sequences.fastaalidation_files() = Dict(
+validation_files() = Dict(
         ("in",1, "") => joinpath(validation_dir(), "Input_Minilib_DNA.fasta"),
         ("o+",1, "black")  => joinpath(validation_dir(), "O+_Black_Minilib_R1_DNA.fasta"),
         ("o-",1, "black")  => joinpath(validation_dir(), "O-_Black_Minilib_R1_DNA.fasta"),
