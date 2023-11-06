@@ -1,0 +1,35 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+    
+jobs:
+  test:
+    name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - '1.9'
+        os:
+          - ubuntu-latest
+        arch:
+          - x64
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - uses: julia-actions/setup-julia@f40c4b69330df1d22e7590c12e76dc2f9c66e0bc
+        with:
+          version: ${{ matrix.version }}
+          arch: ${{ matrix.arch }}
+      - uses: julia-actions/cache@8ef8d3313f5536c64072e04a9dad48c6669dc264
+
+      # Install dependencies. Instruct Pkg to use command-line `git`, which is more likely to work
+      # with the SSH key setup above.
+      - uses: julia-actions/julia-buildpkg@00f9fd6b2600be0a8d80566dd4d4d2389b3468eb
+        env:
+          JULIA_PKG_USE_CLI_GIT: true
+
+      # Run tests
+      - uses: julia-actions/julia-runtest@79a7e100883947123f8263c5f06e6c0ea3eb972f

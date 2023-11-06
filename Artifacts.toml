@@ -1,0 +1,7 @@
+[generative_model_2022]
+git-tree-sha1 = "4f1069a8255e7560538a8d8642c2bfb4759ff4c7"
+lazy = true
+
+    [[generative_model_2022.download]]
+    sha256 = "3aa7b48e61c3ce4d3c032add10c25978c8adbf22c7c29e31739f5e3de08f861d"
+    url = "https://gist.github.com/cossio/fa81dbd2ead30abe4fec89e656c78140/raw/4f1069a8255e7560538a8d8642c2bfb4759ff4c7.tar.gz"
