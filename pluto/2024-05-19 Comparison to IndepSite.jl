@@ -20,10 +20,22 @@ import Makie, CairoMakie
 md"# Scripts"
 
 # ╔═╡ 7d1c4fd4-f223-4b18-9f34-24591f15d126
-root = Ab4Paper2023.experiment_with_targets(; colors=["black", "blue"])
+root = Ab4Paper2023.experiment_with_targets()
 
 # ╔═╡ 0247e6a7-bc15-448a-ba8d-d69103f596ba
 data = Ab4Paper2023.Data(root)
+
+# ╔═╡ 05f042d8-2b33-4fe4-aace-8532656d12b2
+sizeof(data.counts)
+
+# ╔═╡ f52e1229-f641-4040-a77f-cc5f1f1da125
+train_data, tests_data = Ab4Paper2023.data_split_counts(data, 0.8)
+
+# ╔═╡ 29cbf6bd-0a61-4399-8df4-260781660d0d
+sizeof(data.sequences)
+
+# ╔═╡ d69d08ed-ac4f-4909-8379-9c86100fdbdd
+data.
 
 # ╔═╡ Cell order:
 # ╠═fef2bcf6-2aa7-463c-a194-3f2841a1395b
@@ -33,3 +45,7 @@ data = Ab4Paper2023.Data(root)
 # ╠═a48fbc48-7b4a-46cc-b0d5-703bd713ee94
 # ╠═7d1c4fd4-f223-4b18-9f34-24591f15d126
 # ╠═0247e6a7-bc15-448a-ba8d-d69103f596ba
+# ╠═05f042d8-2b33-4fe4-aace-8532656d12b2
+# ╠═f52e1229-f641-4040-a77f-cc5f1f1da125
+# ╠═29cbf6bd-0a61-4399-8df4-260781660d0d
+# ╠═d69d08ed-ac4f-4909-8379-9c86100fdbdd

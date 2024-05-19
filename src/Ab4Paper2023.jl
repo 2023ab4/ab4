@@ -4,16 +4,20 @@ import AbstractTrees
 import ChainRulesCore
 import Flux
 import JLD2
-using CSV: File
-using SpecialFunctions: loggamma
+import LazyArtifacts
 using AbstractTrees: PreOrderDFS
-using BioSequences: LongDNA, translate
-using Statistics: mean
-using DataFrames: DataFrame
-using Flux: @functor, logsoftmax
-using LazyArtifacts: LazyArtifacts, @artifact_str
+using BioSequences: LongDNA
+using BioSequences: translate
 using ChainRulesCore: @ignore_derivatives
+using CSV: File
+using DataFrames: DataFrame
+using Flux: @functor
+using Flux: logsoftmax
+using LazyArtifacts: @artifact_str
 using LogExpFunctions: logsumexp
+using Random: randperm
+using SpecialFunctions: loggamma
+using Statistics: mean
 
 const Float = Float32 # float type we use
 const NumArray{T<:Number,N} = AbstractArray{<:T,N}
