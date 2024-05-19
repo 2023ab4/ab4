@@ -23,16 +23,17 @@ using Flux: logsoftmax
 using Flux: params
 using LazyArtifacts: @artifact_str
 using LogExpFunctions: logsumexp
+using Optim: LBFGS
+using Optim: NelderMead
+using Optim: only_fg!
+using Optim: optimize
+using Optim: Options
+using Optim: ZerothOrderOptimizer
 using Random: randperm
 using SpecialFunctions: loggamma
 using Statistics: mean
 using ValueHistories: MVHistory
-using Optim: optimize
-using Optim: only_fg!
-using Optim: LBFGS
-using Optim: NelderMead
-using Optim: ZerothOrderOptimizer
-using Optim: Options
+using Zygote: gradient
 
 const Float = Float32 # float type we use
 const NumArray{T<:Number,N} = AbstractArray{<:T,N}

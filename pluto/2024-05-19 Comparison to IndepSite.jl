@@ -69,10 +69,10 @@ deep_state_indices = Dict(k => i for (i, k) in enumerate(keys(Base.structdiff(de
 # ╔═╡ 05c1c7f8-9264-494f-8400-af594473a78d
 # L2 regularization function on deep model weights
 function deep_reg_l2()
-	w2 = zero(eltype(deep_model.states[state_indices[:black]].m[2].weight))
+	w2 = zero(eltype(deep_model.states[deep_state_indices[:black]].m[2].weight))
 	for k in (:black, :blue, :amplification, :beads)
-		for l in 2:length(deep_model.states[state_indices[k]].m)
-			w2 += sum(abs2, deep_model.states[state_indices[k]].m[l].weight)
+		for l in 2:length(deep_model.states[deep_state_indices[k]].m)
+			w2 += sum(abs2, deep_model.states[deep_state_indices[k]].m[l].weight)
 		end
 	end
 	return w2
