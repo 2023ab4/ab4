@@ -10,6 +10,9 @@ import Revise, Pkg; Pkg.activate(Base.current_project())
 # ╔═╡ 764778b6-a0ca-46ae-9a2e-51bd50fb1fd2
 using Random: randperm
 
+# ╔═╡ d099b765-cf24-43ab-af57-d8fcfe1809ca
+using ValueHistories: MVHistory
+
 # ╔═╡ fef2bcf6-2aa7-463c-a194-3f2841a1395b
 md"# Imports"
 
@@ -75,12 +78,15 @@ function deep_reg_l2()
 	return w2
 end
 
+# ╔═╡ 38c77bf3-eebe-4bd8-8e32-28f582fbaa6b
+λ_reg_deep = 0.01
+
 # ╔═╡ e1354305-d356-49ce-8660-c588b9014443
 begin
-	local history
+	deep_history = MVHistory()
 	for batchsize = [200, 1000, 2000, 4000]
 		@info "Training (batchsize $batchsize) ..."
-		history = Ab4Paper2023.learn!(model, data; rare_binding=true, epochs=1:200, batchsize, opt=Flux.AdaBelief(), reg=() -> λ * reg_l2())
+		deep_history = Ab4Paper2023.learn!(deep_model, data_train; rare_binding=true, epochs=1:200, batchsize, opt=Flux.AdaBelief(), reg=() -> (λ_reg_deep * deep_reg_l2()), history=deep_history)
 	end
 end
 
@@ -91,6 +97,7 @@ end
 # ╠═b7f75dae-b12c-4f0c-b456-671c7621e737
 # ╠═c37b2ac5-8d71-423d-805d-cc747a72c6c2
 # ╠═764778b6-a0ca-46ae-9a2e-51bd50fb1fd2
+# ╠═d099b765-cf24-43ab-af57-d8fcfe1809ca
 # ╠═a48fbc48-7b4a-46cc-b0d5-703bd713ee94
 # ╠═7d1c4fd4-f223-4b18-9f34-24591f15d126
 # ╠═0247e6a7-bc15-448a-ba8d-d69103f596ba
@@ -103,4 +110,5 @@ end
 # ╠═34e34017-ae02-4c98-aba2-d34da625f197
 # ╠═60a5c662-d542-4a33-a9d5-623658829f6a
 # ╠═05c1c7f8-9264-494f-8400-af594473a78d
+# ╠═38c77bf3-eebe-4bd8-8e32-28f582fbaa6b
 # ╠═e1354305-d356-49ce-8660-c588b9014443

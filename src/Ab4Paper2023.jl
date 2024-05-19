@@ -20,6 +20,7 @@ using DataFrames: DataFrame
 using Flux: @functor
 using Flux: Adam
 using Flux: logsoftmax
+using Flux: params
 using LazyArtifacts: @artifact_str
 using LogExpFunctions: logsumexp
 using Random: randperm

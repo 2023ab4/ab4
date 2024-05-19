@@ -247,3 +247,6 @@ function rare_binding_gauge_zeta!(model::Model)
     model.ζ .= 0
     return model
 end
+
+epochs2range(epochs::UnitRange) = epochs
+epochs2range(epochs::Integer) = 1:epochs
