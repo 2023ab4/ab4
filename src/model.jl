@@ -108,3 +108,42 @@ energies(sequences::Sequences, model::Model) = mapreduce(hcat, model.states) do 
 end
 
 energies(data::Data, model::Model) = energies(data.sequences, model)
+
+"""
+    learn!(model, data; kwargs...)
+
+Train a tree model on data.
+"""
+function learn!(
+    model::Model,
+    data::Data;
+    opt = Adam(), # optimizer
+    epochs = 1:100, # epoch indices
+    reg = () -> false, # regularization
+    batchsize = number_of_sequences(data),
+    callback = nothing,
+    history = MVHistory(),
+    ps = params(model), # parameters to optimize over
+    rare_binding::Bool = false
+)
+    @assert number_of_rounds(model) == number_of_rounds(data)
+    _epochs = epochs2range(epochs)
+    for epoch = _epochs
+        for batch in minibatches(data, batchsize)
+            gs = gradient(ps) do
+                ll = log_likelihood(model, data; rare_binding = rare_binding, batch = batch)
+                @ignore_derivatives push!(history, :loglikelihood_batch, ll)
+                @ignore_derivatives push!(history, :epoch, epoch)
+                return reg() - ll
+            end
+            update!(opt, ps, gs)
+            callback === nothing || callback()
+        end
+        push!(
+            history,
+            :loglikelihood,
+            log_likelihood(model, data; rare_binding = rare_binding)
+        )
+    end
+    return history
+end

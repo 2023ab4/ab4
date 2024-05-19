@@ -16,8 +16,10 @@ using ChainRulesCore: @ignore_derivatives
 using ChainRulesCore: NoTangent
 using CSV: File
 using DataFrames: DataFrame
+using ValueHistories: MVHistory
 using Flux: @functor
 using Flux: logsoftmax
+using Flux: Adam
 using LazyArtifacts: @artifact_str
 using LogExpFunctions: logsumexp
 using Random: randperm

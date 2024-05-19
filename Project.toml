@@ -21,6 +21,7 @@ Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+ValueHistories = "98cad3c8-aec3-5f06-8e41-884608649ab7"
 
 [compat]
 AbstractTrees = "0.4"
@@ -40,4 +41,5 @@ Random = "1.10"
 SpecialFunctions = "2.3"
 Statistics = "1.10"
 StatsBase = "0.34"
+ValueHistories = "0.5.4"
 julia = "1.10"
