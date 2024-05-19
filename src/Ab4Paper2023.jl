@@ -5,10 +5,15 @@ import ChainRulesCore
 import Flux
 import JLD2
 import LazyArtifacts
+import FiniteDifferences
+import Makie
+import CairoMakie
+import OneHot
 using AbstractTrees: PreOrderDFS
 using BioSequences: LongDNA
 using BioSequences: translate
 using ChainRulesCore: @ignore_derivatives
+using ChainRulesCore: NoTangent
 using CSV: File
 using DataFrames: DataFrame
 using Flux: @functor

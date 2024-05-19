@@ -1,6 +1,8 @@
 [deps]
 AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+FiniteDifferences = "26cc04aa-876d-5657-8c51-4c34ba976000"
 Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 LogExpFunctions = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
@@ -8,4 +10,4 @@ OneHot = "460b0459-f81d-40f2-a460-3486927c7399"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-Aqua = "0.7"
+Aqua = "0.8"

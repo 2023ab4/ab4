@@ -87,8 +87,8 @@ function data_split_counts(data::Data, frac::Real = 0.8)
     S = number_of_sequences(data)
     p = randperm(S)
     i = round(Int, frac * S)
-    data_1 = remove_sequence_counts(data, p[1:i])
-    data_2 = remove_sequence_counts(data, p[(i + 1):end])
+    data_1 = remove_sequence_counts(data, p[(i + 1):end])
+    data_2 = remove_sequence_counts(data, p[1:i])
     return data_1, data_2
 end
 
