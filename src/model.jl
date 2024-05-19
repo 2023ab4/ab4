@@ -110,6 +110,48 @@ end
 energies(data::Data, model::Model) = energies(data.sequences, model)
 
 """
+    log_likelihood_samples(model, data)
+
+Log-likelihood of each experiment, computed as sum(R[s,t] * log(N[s,t]) over s),
+for each sample 't'.
+"""
+function log_likelihood_samples(
+    model::Model,
+    data::Data;
+    rare_binding::Bool = false,
+    batch::MiniBatch = MiniBatch(data) # current minibatch (optional)
+)
+    lp = log_selectivities(model, batch; rare_binding = rare_binding)
+    return log_likelihood_samples(lp, model.ζ, data; batch = batch)
+end
+
+function log_likelihood_samples(
+    lp::AbstractMatrix,
+    ζ::AbstractVector,
+    data::Data;
+    batch::MiniBatch = MiniBatch(data), # current minibatch (optional)
+)
+    lN = log_abundances(lp, ζ, data; batch = batch)
+    X = @. ifelse(iszero(batch.counts), zero(batch.counts * lN), batch.counts * lN)
+    return vec(data.lMt) / number_of_sequences(data) .+ mean_(X; dims = 1)
+end
+
+function log_likelihood(model::Model, data::Data; kwargs...)
+    ls = log_likelihood_samples(model, data; kwargs...)
+    return sum(ls)
+end
+
+function log_likelihood(
+    lp::AbstractMatrix,
+    ζ::AbstractVector,
+    data::Data;
+    batch::MiniBatch = MiniBatch(data)
+)
+    ls = log_likelihood_samples(lp, ζ, data; batch = batch)
+    return sum(ls)
+end
+
+"""
     learn!(model, data; kwargs...)
 
 Train a tree model on data.
@@ -146,4 +188,62 @@ function learn!(
         )
     end
     return history
+end
+
+"""
+    rare_binding_gauge!(model)
+
+Same as `rare_binding_gauge`, but modifies `model` in-place.
+"""
+function rare_binding_gauge!(model::Model)
+    a = -sum(model.select .* model.μ; dims = 1) ./ sum(model.select; dims = 1)
+    b = -sum(model.washed .* model.μ; dims = 1) ./ sum(model.washed; dims = 1)
+    model.μ .= model.μ .+ model.select .* a .+ model.washed .* b
+    model.ζ .= model.ζ .+ dropdims(a; dims = 1) .- dropdims(b; dims = 1)
+    return model
+end
+
+"""
+    rare_binding_gauge(model)
+
+In the rare-binding approximation, there's a gauge invariance between μ and ζ. We fix it
+by requiring sum(μ over selected states) = sum(μ over washed states) = 0, for all rounds.
+"""
+function rare_binding_gauge(model::Model)
+    a = -sum(model.select .* model.μ; dims = 1) ./ sum(model.select; dims = 1)
+    b = -sum(model.washed .* model.μ; dims = 1) ./ sum(model.washed; dims = 1)
+    μ = model.μ .+ model.select .* a .+ model.washed .* b
+    ζ = model.ζ .+ dropdims(a; dims = 1) .- dropdims(b; dims = 1)
+    return Model(model.states, μ, ζ, model.select, model.washed)
+end
+
+"""
+    rare_binding_gauge_zeta(model)
+
+In the rare-binding approximation, there's a gauge invariance between μ and ζ. We fix it
+here by setting ζ = 0 for all rounds.
+"""
+function rare_binding_gauge_zeta(model::Model)
+    S = sum(model.select; dims=1) # number of selected states
+    N = sum(model.washed; dims=1) # number of washed states
+    a = -N .* model.ζ' ./ (S + N)
+    b =  S .* model.ζ' ./ (S + N)
+    μ = model.μ .+ model.select .* a .+ model.washed .* b
+    ζ = zero(model.ζ)
+    return Model(model.states, μ, ζ, model.select, model.washed)
+end
+
+"""
+    rare_binding_gauge_zeta!(model)
+
+Same as `rare_binding_gauge_zeta`, but modifies `model` in-place.
+"""
+function rare_binding_gauge_zeta!(model::Model)
+    S = sum(model.select; dims=1) # number of selected states
+    N = sum(model.washed; dims=1) # number of washed states
+    a = -N .* model.ζ' ./ (S + N)
+    b =  S .* model.ζ' ./ (S + N)
+    model.μ .+= model.select .* a .+ model.washed .* b
+    model.ζ .= 0
+    return model
 end
