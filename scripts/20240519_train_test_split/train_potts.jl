@@ -22,15 +22,15 @@ train_frac = 0.8
 data_train = Ab4Paper2023.remove_sequence_counts(data, seq_perm[1 + round(Int, train_frac * Ab4Paper2023.number_of_sequences(data)):end])
 data_tests = Ab4Paper2023.remove_sequence_counts(data, seq_perm[1:round(Int, train_frac * Ab4Paper2023.number_of_sequences(data))])
 
-# Train indep model
+# Train Potts model
 states = (
-    black = ( Ab4Paper2023.DeepEnergy(Flux.Chain(Flux.flatten, Flux.Dense(20 * 4 => 1))), ),
-    blue  = ( Ab4Paper2023.DeepEnergy(Flux.Chain(Flux.flatten, Flux.Dense(20 * 4 => 1))), ),
+    black = ( Ab4Paper2023.Epistasis(20, 4, Float32), ),
+    blue  = ( Ab4Paper2023.Epistasis(20, 4, Float32), ),
     common = ( ),
-    amplification = ( Ab4Paper2023.DeepEnergy(Flux.Chain(Flux.flatten, Flux.Dense(20 * 4 => 1))), ),
-    deplification = ( Ab4Paper2023.DeepEnergy(Flux.Chain(Flux.flatten, Flux.Dense(20 * 4 => 1))), ),
-    wash = ( Ab4Paper2023.DeepEnergy(Flux.Chain(Flux.flatten, Flux.Dense(20 * 4 => 1))), ),
-    beads = ( Ab4Paper2023.DeepEnergy(Flux.Chain(Flux.flatten, Flux.Dense(20 * 4 => 1))), ),
+    amplification = ( Ab4Paper2023.Epistasis(20, 4, Float32), ),
+    deplification = ( Ab4Paper2023.Epistasis(20, 4, Float32), ),
+    wash = ( Ab4Paper2023.Epistasis(20, 4, Float32), ),
+    beads = ( Ab4Paper2023.Epistasis(20, 4, Float32), ),
 )
 
 model = Ab4Paper2023.build_model(states, root)
@@ -38,11 +38,9 @@ state_indices = Dict(k => i for (i, k) in enumerate(keys(Base.structdiff(states,
 
 # L2 regularization function on model weights
 function reg_l2()
-	w2 = zero(eltype(model.states[state_indices[:black]].m[2].weight))
+	w2 = zero(eltype(model.states[state_indices[:black]].J))
 	for k = (:black, :blue, :amplification, :deplification, :beads, :wash)
-		for l in 2:length(model.states[state_indices[k]].m)
-			w2 += sum(abs2, model.states[state_indices[k]].m[l].weight)
-		end
+		w2 += sum(abs2, model.states[state_indices[k]].J)
 	end
 	return w2
 end
@@ -56,4 +54,4 @@ for batchsize = [200, 1000, 2000, 4000]
 end
 
 @info "$(Dates.now()) Saving"
-JLD2.jldsave("data/indep_model.jld2"; model, state_indices, history, seq_perm, train_frac, λ_reg)
+JLD2.jldsave("data/potts_model.jld2"; model, state_indices, history, seq_perm, train_frac, λ_reg)
