@@ -3,6 +3,7 @@ module Ab4Paper2023
 import AbstractTrees
 import CairoMakie
 import ChainRulesCore
+import Dates
 import FiniteDifferences
 import Flux
 import JLD2
@@ -21,6 +22,7 @@ using Flux: @functor
 using Flux: Adam
 using Flux: logsoftmax
 using Flux: params
+using Flux: update!
 using LazyArtifacts: @artifact_str
 using LogExpFunctions: logsumexp
 using Optim: LBFGS
