@@ -33,20 +33,20 @@ function experiment_with_targets(;
     end
     root = Experiment(root_seqs, root_cnts, "root")
     experiments = Dict("root" => root)
-    for c in all_colors
+    for c = all_colors
         experiments[c*"1o-"] = Experiment(parser(FILES[c,1,"o-"])..., root, "$c 1 o-")
         experiments[c*"1o+"] = Experiment(parser(FILES[c,1,"o+"])..., root, "$c 1 o+")
         experiments[c*"2in"] = Experiment(parser(FILES[c,2,"in"])..., experiments[c*"1o+"], "$c 2 in")
         experiments[c*"2o-"] = Experiment(parser(FILES[c,2,"o-"])..., experiments[c*"2in"], "$c 2 o-")
         experiments[c*"2o+"] = Experiment(parser(FILES[c,2,"o+"])..., experiments[c*"2in"], "$c 2 o+")
         if c ∉ colors
-            for t in ["1o-", "1o+", "2in", "2o-", "2o+"]
+            for t = ["1o-", "1o+", "2in", "2o-", "2o+"]
                 experiments["$c$t"].counts .= 0 # only include counts in `colors`
             end
         end
     end
     if !include_beads
-        for c in all_colors, t in ["1o-", "2o-"]
+        for c = all_colors, t in ["1o-", "2o-"]
             experiments["$c$t"].counts .= 0 # don't include rounds with empty beads
         end
     end

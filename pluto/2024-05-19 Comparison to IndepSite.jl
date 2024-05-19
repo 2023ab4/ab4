@@ -19,8 +19,11 @@ import Makie, CairoMakie
 # ╔═╡ a48fbc48-7b4a-46cc-b0d5-703bd713ee94
 md"# Scripts"
 
-# ╔═╡ c121a08c-7592-4955-8014-33cbb86629d3
+# ╔═╡ 7d1c4fd4-f223-4b18-9f34-24591f15d126
+root = Ab4Paper2023.experiment_with_targets(; colors=["black", "blue"])
 
+# ╔═╡ 0247e6a7-bc15-448a-ba8d-d69103f596ba
+data = Ab4Paper2023.Data(root)
 
 # ╔═╡ Cell order:
 # ╠═fef2bcf6-2aa7-463c-a194-3f2841a1395b
@@ -28,4 +31,5 @@ md"# Scripts"
 # ╠═9bcddb57-9009-4594-ba05-85b856893741
 # ╠═c37b2ac5-8d71-423d-805d-cc747a72c6c2
 # ╠═a48fbc48-7b4a-46cc-b0d5-703bd713ee94
-# ╠═c121a08c-7592-4955-8014-33cbb86629d3
+# ╠═7d1c4fd4-f223-4b18-9f34-24591f15d126
+# ╠═0247e6a7-bc15-448a-ba8d-d69103f596ba

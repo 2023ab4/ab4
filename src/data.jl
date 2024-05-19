@@ -75,6 +75,34 @@ function data_split(data::Data, frac::Real = 0.8)
     return data_1, data_2
 end
 
+"""
+    data_split_counts(data, frac = 0.8)
+
+Splits `data` into two subsets (e.g. train and tests), containing `frac` and `1 - frac`
+fractions of sequences, respectively. In contrast to `data_split`, here we simply set
+counts to zero for a part of the sequences in each dataset.
+"""
+function data_split_counts(data::Data, frac::Real = 0.8)
+    @assert 0 ≤ frac ≤ 1
+    S = number_of_sequences(data)
+    p = randperm(S)
+    i = round(Int, frac * S)
+    data_1 = remove_sequence_counts(data, p[1:i])
+    data_2 = remove_sequence_counts(data, p[(i + 1):end])
+    return data_1, data_2
+end
+
+"""
+    remove_sequence_counts(data, select)
+
+Returns a copy of `data` where counts of sequences in select have been set to zero.
+"""
+function remove_sequence_counts(data::Data, sequence_indices::AbstractVector{Int})
+    counts = copy(data.counts)
+    counts[sequence_indices, :] .= 0
+    return Data(data.sequences, counts, data.ancestors)
+end
+
 function minibatches(data::Data, n::Int; fullonly=false)
     S = number_of_sequences(data)
     p = randperm(S)
