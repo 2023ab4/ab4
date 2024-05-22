@@ -6,6 +6,7 @@ import ChainRulesCore
 import Dates
 import FiniteDifferences
 import Flux
+import HypothesisTests
 import JLD2
 import LazyArtifacts
 import Makie
