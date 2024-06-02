@@ -120,14 +120,14 @@ Ab4Paper2023.log_likelihood(indep_model_opt_tests, data_tests; rare_binding=true
 
 # ╔═╡ ed95d912-7b8d-41b7-b912-79551aeef5f1
 let fig = Makie.Figure()
-	ax = Makie.Axis(fig[1,1], width=300, height=300, title="Train data (80% of sequences)", xticks=(1:3, ["Indep.", "Potts", "Deep"]))
+	ax = Makie.Axis(fig[1,1], width=300, height=300, title="Train data (80% of sequences)", xticks=(1:3, ["Indep.", "Potts", "Deep"]), ylabel="log-likelihood")
 	Makie.barplot!(ax, 1:3, [
 		Ab4Paper2023.log_likelihood(indep_model, data_train; rare_binding=true),
 		Ab4Paper2023.log_likelihood(potts_model, data_train; rare_binding=true),
 		Ab4Paper2023.log_likelihood(deep_model, data_train; rare_binding=true)
 	])
 
-	ax = Makie.Axis(fig[1,2], width=300, height=300, title="Tests data (20% of sequences)", xticks=(1:3, ["Indep.", "Potts", "Deep"]))
+	ax = Makie.Axis(fig[1,2], width=300, height=300, title="Tests data (20% of sequences)", xticks=(1:3, ["Indep.", "Potts", "Deep"]), ylabel="log-likelihood")
 	Makie.barplot!(ax, 1:3, [
 		Ab4Paper2023.log_likelihood(indep_model_opt_tests, data_tests; rare_binding=true),
 		Ab4Paper2023.log_likelihood(potts_model_opt_tests, data_tests; rare_binding=true),
