@@ -2,7 +2,7 @@
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "013526a070e756c2a44341f890a04ae18b7aaddf"
+project_hash = "1b9b488e8fb687293cfdf5af3f46dcef114722fb"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -1101,6 +1101,12 @@ deps = ["BangBang", "InitialValues", "Setfield"]
 git-tree-sha1 = "629afd7d10dbc6935ec59b32daeb33bc4460a42e"
 uuid = "128add7d-3638-4c79-886c-908ea0c25c34"
 version = "0.1.4"
+
+[[deps.MiniLoggers]]
+deps = ["Dates", "Logging", "Markdown"]
+git-tree-sha1 = "109a5eafeb5d31ad1f6fe288b024cb0ba825ac77"
+uuid = "93f3dd0f-005d-4452-894a-a31841fa4078"
+version = "0.5.3"
 
 [[deps.Missings]]
 deps = ["DataAPI"]
