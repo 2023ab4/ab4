@@ -19,14 +19,14 @@ using Flux: Chain
 using Flux: Dense
 using Flux: flatten
 using Flux: selu
+using Logging: with_logger
 using Makie: @L_str
 using MiniLoggers: global_logger
 using MiniLoggers: MiniLogger
 using Statistics: cor
 using Statistics: mean
-using Logging: with_logger
 
-function train(; λ = 0.01, train_targets, include_beads::Bool=true, filename::AbstractString)
+function train(; λ = 0.005, train_targets, include_beads::Bool, filename::AbstractString)
     @info "Loading data"
     root = experiment_with_targets(; colors=train_targets, include_beads)
     data = Data(root)
@@ -61,7 +61,7 @@ function train(; λ = 0.01, train_targets, include_beads::Bool=true, filename::A
     end
 
     local history
-    for batchsize = [200, 1000, 2000, 4000]
+    for batchsize = [200, 400, 1000, 2000, 4000, 10000]
         @info "Training (batchsize $batchsize) ..."
         history = Ab4Paper2023.learn!(
             model, data; rare_binding=true, epochs=1:200, batchsize, opt=AdaBelief(), reg=() -> λ * reg_l2()
@@ -79,7 +79,8 @@ end
 tasks = [
     (; train_targets=["black", "blue"], include_beads=true), # train on black, blue; predict both
     (; train_targets=["black", "both"], include_beads=true), # train on black, both; predict blue
-    (; train_targets=["blue"], include_beads=false), # train on blue; predict beads
+    (; train_targets=["blue", "both"], include_beads=true), # train on black, both; predict blue
+    (; train_targets=["blue"], include_beads=false), # train on blue (no beads); predict beads
     (; train_targets=["both"], include_beads=true), # train on both; predict black
 ]
 
