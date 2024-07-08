@@ -10,6 +10,7 @@ import HypothesisTests
 import JLD2
 import LazyArtifacts
 import Makie
+import MiniLoggers
 import OneHot
 import Zygote
 using AbstractTrees: PreOrderDFS
@@ -54,5 +55,6 @@ include("model.jl")
 include("build_model.jl")
 include("optimize_depletion.jl")
 include("indep_model.jl")
+include("deep.jl")
 
 end

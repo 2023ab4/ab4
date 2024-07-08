@@ -52,9 +52,10 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
     # L2 regularization function on deep model weights
     function reg_l2()
         w2 = zero(eltype(model.states[state_indices[:black]].m[2].weight))
-        for k in (:black, :blue, :amplification, :beads)
-            for l in 2:length(model.states[state_indices[k]].m)
+        for k = (:black, :blue, :amplification, :beads)
+            for l = 2:length(model.states[state_indices[k]].m)
                 w2 += sum(abs2, model.states[state_indices[k]].m[l].weight)
+                w2 += sum(abs2, model.states[state_indices[k]].m[l].bias) # regularize also biases
             end
         end
         return w2
@@ -77,16 +78,16 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
 end
 
 tasks = [
-    #(; train_targets=["black", "blue"], include_beads=true), # train on black, blue; predict both
-    #(; train_targets=["black", "both"], include_beads=true), # train on black, both; predict blue
-    #(; train_targets=["blue", "both"], include_beads=true), # train on blue, both; predict black
-    #(; train_targets=["blue"], include_beads=false), # train on blue (no beads); predict beads
-    #(; train_targets=["both"], include_beads=true), # train on both; predict black
+    (; train_targets=["black", "blue"], include_beads=true), # train on black, blue; predict both
+    (; train_targets=["black", "both"], include_beads=true), # train on black, both; predict blue
+    (; train_targets=["blue", "both"], include_beads=true), # train on blue, both; predict black
+    (; train_targets=["blue"], include_beads=false), # train on blue (no beads); predict beads
+    (; train_targets=["both"], include_beads=true), # train on both; predict black
     (; train_targets=["black", "blue", "both"], include_beads=true), # train on all data
 ]
 
 @sync for current_task = tasks
-    filename="data2/deep_$(join(current_task.train_targets, '+'))"
+    filename="data_reg_bias/deep_$(join(current_task.train_targets, '+'))"
     Threads.@spawn with_logger(MiniLogger(; io = "$filename.log", ioerr = "$filename.err")) do
         train(; λ=0.1, current_task.train_targets, current_task.include_beads, filename="$filename.jld2")
     end

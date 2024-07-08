@@ -37,13 +37,13 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
     else
         @info "Saved model NOT found. Building new model ..."
         states = (
-            black = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 20, selu), Dense(20 => 5, selu), Dense(5 => 1, selu))), ),
-            blue  = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 20, selu), Dense(20 => 5, selu), Dense(5 => 1, selu))), ),
+            black = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 1))), ),
+            blue  = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 1))), ),
             common = ( ),
-            amplification = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 20, selu), Dense(20 => 5, selu), Dense(5 => 1, selu))), ),
-            deplification = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 20, selu), Dense(20 => 5, selu), Dense(5 => 1, selu))), ),
-            wash = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 20, selu), Dense(20 => 5, selu), Dense(5 => 1, selu))), ),
-            beads = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 20, selu), Dense(20 => 5, selu), Dense(5 => 1, selu))), ),
+            amplification = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 1))), ),
+            deplification = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 1))), ),
+            wash = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 1))), ),
+            beads = ( DeepEnergy(Chain(flatten, Dense(20 * 4 => 1))), ),
         )
         model = build_model(states, root)
     end
@@ -52,8 +52,8 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
     # L2 regularization function on deep model weights
     function reg_l2()
         w2 = zero(eltype(model.states[state_indices[:black]].m[2].weight))
-        for k in (:black, :blue, :amplification, :beads)
-            for l in 2:length(model.states[state_indices[k]].m)
+        for k = (:black, :blue, :amplification, :beads)
+            for l = 2:length(model.states[state_indices[k]].m)
                 w2 += sum(abs2, model.states[state_indices[k]].m[l].weight)
             end
         end
@@ -76,18 +76,18 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
     JLD2.jldsave(filename; model, states, history)
 end
 
+@info "Training branch models in parallel ..."
 tasks = [
-    #(; train_targets=["black", "blue"], include_beads=true), # train on black, blue; predict both
-    #(; train_targets=["black", "both"], include_beads=true), # train on black, both; predict blue
-    #(; train_targets=["blue", "both"], include_beads=true), # train on blue, both; predict black
-    #(; train_targets=["blue"], include_beads=false), # train on blue (no beads); predict beads
-    #(; train_targets=["both"], include_beads=true), # train on both; predict black
-    (; train_targets=["black", "blue", "both"], include_beads=true), # train on all data
+    (; train_targets=["black", "blue"], include_beads=true), # train on black, blue; predict both
+    (; train_targets=["black", "both"], include_beads=true), # train on black, both; predict blue
+    (; train_targets=["blue", "both"], include_beads=true), # train on blue, both; predict black
+    (; train_targets=["blue"], include_beads=false), # train on blue (no beads); predict beads
+    (; train_targets=["both"], include_beads=true), # train on both; predict black
 ]
 
 @sync for current_task = tasks
-    filename="data2/deep_$(join(current_task.train_targets, '+'))"
+    filename = "data_indep/indep_$(join(current_task.train_targets, '+'))"
     Threads.@spawn with_logger(MiniLogger(; io = "$filename.log", ioerr = "$filename.err")) do
-        train(; λ=0.1, current_task.train_targets, current_task.include_beads, filename="$filename.jld2")
+        train(; λ=0.01, current_task.train_targets, current_task.include_beads, filename="$filename.jld2")
     end
 end

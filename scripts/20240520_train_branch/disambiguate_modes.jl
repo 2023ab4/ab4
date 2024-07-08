@@ -34,9 +34,15 @@ root_full = Ab4Paper2023.experiment_with_targets()
 data_full = Ab4Paper2023.Data(root_full)
 node_idx_full = Dict(n.label => t for (t, n) in enumerate(PreOrderDFS(root_full)))
 
+_thresh = 50
+
+#_root_dir = "data_reg_bias"
+#_root_dir = "data_init_with_full"
+#_root_dir = "data_indep"
+_root_dir = "data_init_from_indep"
 
 #= Model trained on blue only. Blue and beads are indescernible and must be manually disambiguated. =#
-let filename = "data/deep_blue.jld2"
+let filename = "$_root_dir/deep_blue.jld2"
     model, states, history = JLD2.load(filename, "model", "states", "history")
 	model_swap, states_swap = JLD2.load(filename, "model", "states")
 	states_swap = ( # swap blue / beads
@@ -55,12 +61,10 @@ let filename = "data/deep_blue.jld2"
 	# original model
 	lN_original = log_abundances(model, data_full, rare_binding=true)
 	lp_original = lN_original[:,i] - lN_original[:,p]
-	@info "True model cor:" cor(lp[_flag], θ[_flag])
 
 	# swapped model
 	lN_swapped = log_abundances(model_swap, data_full, rare_binding=true)
 	lp_swapped = lN_swapped[:,i] - lN_swapped[:,p]
-	@info "Swapped model cor:" cor(lp[_flag], θ[_flag])
 
     if cor(lp_original[_flag], θ[_flag]) > cor(lp_swapped[_flag], θ[_flag])
         JLD2.jldsave("$filename.2"; model, states, history) # just save original model
@@ -71,7 +75,7 @@ end
 
 
 #= Model trained on both targets. Blue and black targets are indescernible, and must be manually disambiguated =#
-let filename = "data/deep_both.jld2"
+let filename = "$_root_dir/deep_both.jld2"
     model, states, history = JLD2.load(filename, "model", "states", "history")
 	model_swap, states_swap = JLD2.load(filename, "model", "states")
 	states_swap = ( # swap black / blue
@@ -88,12 +92,10 @@ let filename = "data/deep_both.jld2"
 	# original model
 	lN_original = log_abundances(model, data_full, rare_binding=true)
 	lp_original = lN_original[:,i] - lN_original[:,p]
-	@info "True model cor:" cor(lp[_flag], θ[_flag])
 
 	# swapped model
 	lN_swapped = log_abundances(model_swap, data_full, rare_binding=true)
 	lp_swapped = lN_swapped[:,i] - lN_swapped[:,p]
-	@info "Swapped model cor:" cor(lp[_flag], θ[_flag])
 
     if cor(lp_original[_flag], θ[_flag]) > cor(lp_swapped[_flag], θ[_flag])
         JLD2.jldsave("$filename.2"; model, states, history) # just save original model
