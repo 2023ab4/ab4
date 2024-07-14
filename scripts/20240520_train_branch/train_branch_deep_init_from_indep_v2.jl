@@ -12,6 +12,7 @@ using Ab4Paper2023: log_likelihood
 using Ab4Paper2023: moving_average
 using Ab4Paper2023: normalize_counts
 using Ab4Paper2023: posonly
+using Ab4Paper2023: deep_model_weights_l2
 using AbstractTrees: isroot
 using AbstractTrees: PreOrderDFS
 using AbstractTrees: print_tree
@@ -35,20 +36,21 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
 
     if isfile(filename)
         @info "Saved model found, loading ..."
-        model, states = JLD2.load(filename, "model", "states")
+        model, states, history = JLD2.load(filename, "model", "states", "history")
     else
         @info "Saved model NOT found. Building new model (from Indep) ..."
         model_indep, states_indep = JLD2.load(filename_indep, "model", "states")
         states = (
-            black = ( train_deep_from_indep(only(states_indep.black), data.sequences), ),
-            blue  = ( train_deep_from_indep(only(states_indep.blue), data.sequences), ),
+            black = ( train_deep_from_indep(only(states_indep.black), data.sequences; λ), ),
+            blue  = ( train_deep_from_indep(only(states_indep.blue), data.sequences; λ), ),
             common = ( ),
-            amplification = ( train_deep_from_indep(only(states_indep.amplification), data.sequences), ),
-            deplification = ( train_deep_from_indep(only(states_indep.deplification), data.sequences), ),
-            wash = ( train_deep_from_indep(only(states_indep.wash), data.sequences), ),
-            beads = ( train_deep_from_indeps(only(states_indep.beads), data.sequences), ),
+            amplification = ( train_deep_from_indep(only(states_indep.amplification), data.sequences; λ), ),
+            deplification = ( train_deep_from_indep(only(states_indep.deplification), data.sequences; λ), ),
+            wash = ( train_deep_from_indep(only(states_indep.wash), data.sequences; λ), ),
+            beads = ( train_deep_from_indep(only(states_indep.beads), data.sequences; λ), ),
         )
         model = build_model(states, root)
+        history = MVHistory()
     end
     state_indices = Dict(k => i for (i, k) in enumerate(keys(Base.structdiff(states, (; common=nothing)))))
 
@@ -56,18 +58,15 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
     function reg_l2()
         w2 = zero(eltype(model.states[state_indices[:black]].m[2].weight))
         for k = (:black, :blue, :amplification, :beads)
-            for l = 2:length(model.states[state_indices[k]].m)
-                w2 += sum(abs2, model.states[state_indices[k]].m[l].weight)
-            end
+            w2 += deep_model_weights_l2(model.states[state_indices[k]]; include_bias=false)
         end
         return w2
     end
 
-    history = MVHistory()
     for batchsize = [200, 400, 800, 1000, 1500, 2000, 2500, 4000]
         @info "Training (batchsize $batchsize) ..."
         Ab4Paper2023.learn!(
-            model, data; rare_binding=true, epochs=1:200, batchsize, opt=AdaBelief(), reg=() -> λ * reg_l2(), history
+            model, data; rare_binding=true, epochs=1:700, batchsize, opt=AdaBelief(), reg=() -> λ * reg_l2(), history
         )
     end
 
@@ -95,6 +94,6 @@ tasks = [
     filename_indep = "data_indep/indep_$(join(current_task.train_targets, '+'))"
 
     Threads.@spawn with_logger(MiniLogger(; io = "$filename.log", ioerr = "$filename.err")) do
-        train(; λ=0.1, current_task.train_targets, current_task.include_beads, filename="$filename.jld2", filename_indep="$filename_indep.jld2")
+        train(; λ=0.01, current_task.train_targets, current_task.include_beads, filename="$filename.jld2", filename_indep="$filename_indep.jld2")
     end
 end

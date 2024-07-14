@@ -65,7 +65,8 @@ md"# Load models"
 #_models_root_dir = "../data2"
 #_models_root_dir = "../data_reg_bias"
 #_models_root_dir = "../data_init_with_full"
-_models_root_dir = "../data_init_from_indep"
+#_models_root_dir = "../data_init_from_indep"
+_models_root_dir = "../data_init_from_indep_v2"
 
 # ╔═╡ f78aaf59-44c1-4e9e-a8e2-a59807862fd2
 model_black_blue, states_black_blue = JLD2.load("$_models_root_dir/deep_black+blue.jld2", "model", "states");

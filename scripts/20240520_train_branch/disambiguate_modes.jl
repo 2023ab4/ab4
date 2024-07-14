@@ -39,7 +39,8 @@ _thresh = 50
 #_root_dir = "data_reg_bias"
 #_root_dir = "data_init_with_full"
 #_root_dir = "data_indep"
-_root_dir = "data_init_from_indep"
+#_root_dir = "data_init_from_indep"
+_root_dir = "data_init_from_indep_v2"
 
 #= Model trained on blue only. Blue and beads are indescernible and must be manually disambiguated. =#
 let filename = "$_root_dir/deep_blue.jld2"

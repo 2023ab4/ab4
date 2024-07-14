@@ -87,18 +87,6 @@ model_both, states_both = JLD2.load("$_models_root_dir/indep_both.jld2.2", "mode
 # ╔═╡ d2db51e0-534b-47e0-a40d-d6f53b7f095d
 _x = randn(Float32, 80)
 
-# ╔═╡ 7b27e35e-8f1e-4808-8742-6e06747c8827
-model_both.states[1].m[2](_x)
-
-# ╔═╡ 7ea3563a-174e-4da4-b4b1-808b480a6b2e
-model_both.states[1].m[2].weight * _x + model_both.states[1].m[2].bias
-
-# ╔═╡ 2bf13e7a-c839-407e-897b-d5c9d952198a
-model_both.states[1].m[2].weight
-
-# ╔═╡ aeac585b-b023-447d-adec-f651ede3e65c
-model_both.states[1].m[2].bias
-
 # ╔═╡ adc67d75-1157-41d5-919b-a07f36473638
 _y = randn(Float32, 4, 20, 1000)
 
@@ -383,10 +371,6 @@ end
 # ╠═1a43945a-b24c-4e71-b759-38d3239a7beb
 # ╠═d22033df-eb5f-462d-b7ca-cbcf43dec49a
 # ╠═d2db51e0-534b-47e0-a40d-d6f53b7f095d
-# ╠═7b27e35e-8f1e-4808-8742-6e06747c8827
-# ╠═7ea3563a-174e-4da4-b4b1-808b480a6b2e
-# ╠═2bf13e7a-c839-407e-897b-d5c9d952198a
-# ╠═aeac585b-b023-447d-adec-f651ede3e65c
 # ╠═adc67d75-1157-41d5-919b-a07f36473638
 # ╠═9dd4f2af-da84-4b7b-9eeb-dead73390278
 # ╠═f910ac5d-912c-4d97-8313-4c61e7813e90

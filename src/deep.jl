@@ -34,7 +34,7 @@ function init_deep_from_indep(indep::DeepEnergy; b0::Real = 1000, ϵ::Real = 1e-
     return deep
 end
 
-function train_deep_from_indep(indep::DeepEnergy, sequences::Sequences; nepochs::Int=500, batchsize::Int=128, opt=AdaBelief())
+function train_deep_from_indep(indep::DeepEnergy, sequences::Sequences; nepochs::Int=500, batchsize::Int=128, opt=Adam(), λ::Real, regularize_bias::Bool=false)
     #@assert length(indep.m) == 2 # Actually, we can allow any model here
 
     deep = DeepEnergy(Flux.Chain(
@@ -49,13 +49,24 @@ function train_deep_from_indep(indep::DeepEnergy, sequences::Sequences; nepochs:
     for epoch = 1:nepochs
         for batch = minibatches(sequences, batchsize)
             gs = gradient(ps) do
-                mean(abs2, energies(batch, deep) - energies(batch, indep))
+                loss = mean(abs2, energies(batch, deep) - energies(batch, indep))
+                return loss + λ * deep_model_weights_l2(deep; include_bias=regularize_bias)
             end
             update!(opt, ps, gs)
-            callback === nothing || callback()
         end
         @info "epoch $epoch / $nepochs, Δ = " * string(mean(abs2, energies(sequences, deep) - energies(sequences, indep)))
     end
 
     return deep
+end
+
+function deep_model_weights_l2(model::DeepEnergy; include_bias::Bool = false)
+    w2 = zero(eltype(model.m[2].weight))
+    for l = 2:length(model.m)
+        w2 += sum(abs2, model.m[l].weight)
+        if include_bias
+            w2 += sum(abs2, model.m[l].bias)
+        end
+    end
+    return w2
 end
