@@ -5,13 +5,13 @@ using Ab4Paper2023: build_model
 using Ab4Paper2023: Data
 using Ab4Paper2023: DeepEnergy
 using Ab4Paper2023: experiment_with_targets
+using Ab4Paper2023: init_deep_from_indep
 using Ab4Paper2023: learn!
 using Ab4Paper2023: log_abundances
 using Ab4Paper2023: log_likelihood
 using Ab4Paper2023: moving_average
 using Ab4Paper2023: normalize_counts
 using Ab4Paper2023: posonly
-using Ab4Paper2023: init_deep_from_indep
 using AbstractTrees: isroot
 using AbstractTrees: PreOrderDFS
 using AbstractTrees: print_tree
@@ -26,6 +26,7 @@ using MiniLoggers: global_logger
 using MiniLoggers: MiniLogger
 using Statistics: cor
 using Statistics: mean
+using ValueHistories: MVHistory
 
 function train(; λ, train_targets, include_beads::Bool, filename::AbstractString, filename_indep::AbstractString)
     @info "Loading data"
@@ -65,11 +66,11 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
         return w2
     end
 
-    local history
+    history = MVHistory()
     for batchsize = [800, 1000, 1500, 2000, 2500, 4000]
         @info "Training (batchsize $batchsize) ..."
-        history = Ab4Paper2023.learn!(
-            model, data; rare_binding=true, epochs=1:200, batchsize, opt=AdaBelief(), reg=() -> λ * reg_l2()
+        Ab4Paper2023.learn!(
+            model, data; rare_binding=true, epochs=1:200, batchsize, opt=AdaBelief(), reg=() -> λ * reg_l2(), history
         )
     end
 

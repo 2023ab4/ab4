@@ -25,6 +25,7 @@ using MiniLoggers: global_logger
 using MiniLoggers: MiniLogger
 using Statistics: cor
 using Statistics: mean
+using ValueHistories: MVHistory
 
 function train(; λ, train_targets, include_beads::Bool, filename::AbstractString)
     @info "Loading data"
@@ -60,11 +61,11 @@ function train(; λ, train_targets, include_beads::Bool, filename::AbstractStrin
         return w2
     end
 
-    local history
-    for batchsize = [800, 1000, 1500, 2000, 2500, 4000]
+    history = MVHistory()
+    for batchsize = [100, 200, 400, 800, 1000, 1500, 2000, 2500, 4000]
         @info "Training (batchsize $batchsize) ..."
-        history = Ab4Paper2023.learn!(
-            model, data; rare_binding=true, epochs=1:200, batchsize, opt=AdaBelief(), reg=() -> λ * reg_l2()
+        Ab4Paper2023.learn!(
+            model, data; rare_binding=true, epochs=1:200, batchsize, opt=AdaBelief(), reg=() -> λ * reg_l2(), history
         )
     end
 

@@ -111,6 +111,14 @@ function minibatches(data::Data, n::Int; fullonly=false)
     return batches
 end
 
+function minibatches(seqs::Sequences, n::Int; fullonly=false)
+    S = size(seqs, 3)
+    p = randperm(S)
+    slices = minibatches(S, n; fullonly = fullonly)
+    batches = [seqs[:,:,b] for b = slices]
+    return batches
+end
+
 """
     minibatch_count(data, n; fullonly=false)
 
