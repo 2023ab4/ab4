@@ -329,7 +329,7 @@ let fig = Makie.Figure(; font="Arial")
 	#Makie.axislegend(ax; framevisible=false, position=(-0.05, -0.03))
 	
 	Makie.resize_to_layout!(fig)
-	#Makie.save("fig/fig2_indep.pdf", fig)
+	Makie.save("../fig/fig2_deep.pdf", fig)
 	fig
 end
 

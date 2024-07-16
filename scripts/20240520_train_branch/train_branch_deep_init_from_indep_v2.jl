@@ -92,8 +92,7 @@ tasks = [
 @sync for current_task = tasks
     filename = "data_init_from_indep_v2/deep_$(join(current_task.train_targets, '+'))"
     filename_indep = "data_indep/indep_$(join(current_task.train_targets, '+'))"
-
     Threads.@spawn with_logger(MiniLogger(; io = "$filename.log", ioerr = "$filename.err")) do
-        train(; λ=0.01, current_task.train_targets, current_task.include_beads, filename="$filename.jld2", filename_indep="$filename_indep.jld2")
+        train(; λ=0.005, current_task.train_targets, current_task.include_beads, filename="$filename.jld2", filename_indep="$filename_indep.jld2")
     end
 end
