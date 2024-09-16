@@ -12,9 +12,9 @@ See the full paper at this [link](https://www.biorxiv.org/content/10.1101/2023.1
 
 ## Installation
 
-The source code is writen in Julia. You can install Julia from https://julialang.org.
+The source code is writen in Julia. To install Julia, please follow the instructions on https://julialang.org/downloads/.
 
-To install the package, clone this repository:
+Next, to install this package, begin by cloning this repository using `git`:
 
 ```
 git clone https://github.com/2023ab4/ab4.git
