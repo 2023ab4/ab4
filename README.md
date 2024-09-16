@@ -12,7 +12,7 @@ See the full paper at this [link](https://www.biorxiv.org/content/10.1101/2023.1
 
 ## Installation
 
-The source code is writen in Julia v1.9. You can install Julia from https://julialang.org.
+The source code is writen in Julia. You can install Julia from https://julialang.org.
 
 To install the package, clone this repository:
 
