@@ -18,16 +18,16 @@ The code is written in **Julia**. To install Julia, follow the instructions at [
 
 1. Clone this repository using `git`:
 
-    ```bash
-    git clone https://github.com/2023ab4/ab4.git
-    ```
+```bash
+git clone https://github.com/2023ab4/ab4.git
+```
 
 2. In the Julia REPL, add the package:
 
-    ```julia
-    Import("Pkg")
-    Pkg.add("<path-to-cloned-repository>")
-    ```
+```julia
+import Pkg
+Pkg.add("<path-to-cloned-repository>")
+```
 
 ## Pluto and Jupyter Notebooks
 
