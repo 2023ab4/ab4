@@ -6,8 +6,7 @@
 #VALIDATION DATASET 
 ##################
 
-
-validation_dir() = joinpath(@__DIR__,"src/data/validation_set/")
+validation_dir() = joinpath(@__DIR__,"..", "data/validation_set/minilib3_github")
 
 # function parse_fasta_header(file::AbstractString)
 #     headers = Tuple[]
@@ -24,9 +23,9 @@ validation_dir() = joinpath(@__DIR__,"src/data/validation_set/")
 #     return (sequences = sequences, headers = headers)
 # end
 
-function probed_candidates(file::String = validation_dir() * "generated_sequences.csv")
+function probed_candidates(file::String = joinpath(validation_dir(),"generated_sequences.csv"))
 
-    df = DataFrame(CSV.File(file))
+    df = DataFrame(File(file))
     df_s=DataFrame(origin = String[],target= String[],optimization_obj= String[],filter= String[], sequences=Vector{String}[])
 
     for or in unique(df.origin), tr in unique(df.target), optobj in unique(df.optimization_obj), fltr in unique(df.filter)
