@@ -51,7 +51,7 @@ Then, navigate to the notebooks folder and select the desired notebook.
 ### Jupyter Notebooks
 Jupyter notebooks are also available in the notebooks directory to help reproduce the results from the paper. To use them:
 
-1. Install Jupyter by following the instructions at Jupyter.
+1. Install Python and Jupyter. For example, you can use https://www.anaconda.com/download.
 
 2. Start a Jupyter session:
 
