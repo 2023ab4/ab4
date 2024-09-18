@@ -7,7 +7,7 @@
 ##################
 
 
-validation_dir() = joinpath(@__DIR__,"data/validation_set/")
+validation_dir() = joinpath(@__DIR__,"src/data/validation_set/")
 
 # function parse_fasta_header(file::AbstractString)
 #     headers = Tuple[]
