@@ -68,7 +68,7 @@ We suggest to use
 - src/: Contains the source code for the project.
 - notebooks/: Contains Pluto and Jupyter notebooks for reproducing results.
 - data/: Input data used in the paper's analysis. 
-- test/: Contains tests module for simple testing functionality
+- test/: Contains test module for simple testing functionality
 
 
 ## License
