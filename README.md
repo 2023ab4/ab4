@@ -69,6 +69,9 @@ As with Pluto, we suggest using Julia 1.10 for compatibility.
 - data/: Input data used in the paper's analysis. 
 - test/: Contains test module for simple testing functionality
 
+## Issues and contributions
+
+If you encounter any problems, please open an issue on this GitHub repository. We also welcome contributions to the codebase. Please open a pull request with your improvements.
 
 ## License
 [MIT license](LICENSE)
