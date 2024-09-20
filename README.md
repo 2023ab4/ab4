@@ -52,17 +52,16 @@ Then, navigate to the notebooks folder and select the desired notebook.
 Jupyter notebooks are also available in the notebooks directory to help reproduce the results from the paper. To use them:
 
 1. Install Python and Jupyter. For example, you can use https://www.anaconda.com/download.
-
-2. Start a Jupyter session:
+2. Install the IJulia kernel. Follow instructions here: https://github.com/JuliaLang/IJulia.jl.
+3. Start a Jupyter session:
 
 ```bash
 jupyter notebook
 ```
-3. Navigate to the notebooks directory, and ensure that the code is executed within the Ab4Paper2023 environment.
+
+4. Navigate to the notebooks directory, and ensure that the code is executed within the Ab4Paper2023 environment, and with the IJulia kernel selected.
 
 As with Pluto, we suggest using Julia 1.10 for compatibility.
-If you're unfamiliar with setting up Jupyter environments with Julia, follow these instructions to install and configure the IJulia package.
-We suggest to use 
 
 ## Project Structure
 - src/: Contains the source code for the project.
