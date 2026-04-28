@@ -25,11 +25,8 @@ function energies(sequences::Sequences, state::Epistasis)
     @assert size(state.h) == (A, L)
     @assert size(state.J) == (A, L, A, L)
     Eh = energies(sequences, IndepSite(state.h))
-    EJ = -tensordot(
-        reshape(sequences, A*L, :),
-        reshape(state.J, A*L, A*L),
-        reshape(sequences, A*L, :)
-    )
+    seqmat = @ignore_derivatives Float.(reshape(sequences, A*L, :))
+    EJ = -tensordot(seqmat, reshape(state.J, A*L, A*L), seqmat)
     @assert size(Eh) == size(EJ) == (size(sequences, 3),)
     return Eh + EJ
 end

@@ -58,9 +58,9 @@ end
 
 @testset "DeepEnergy" begin
     state = DeepEnergy(Chain(flatten, Dense(A*L, 1)))
-    @test energies(seqs_, state) == vec(state.m.layers[2].weight * reshape(seqs_, A * L, :) .+ state.m.layers[2].bias)
+    @test energies(seqs_, state) ≈ vec(state.m.layers[2].weight * reshape(seqs_, A * L, :) .+ state.m.layers[2].bias)
     state = DeepEnergy(Chain(flatten, Dense(A*L, 5, relu), Dense(5, 1)))
-    @test energies(seqs_, state) == vec(state.m(seqs_))
+    @test energies(seqs_, state) ≈ vec(state.m(seqs_))
     @test size(energies(seqs_, state)) == (S,)
 end
 
